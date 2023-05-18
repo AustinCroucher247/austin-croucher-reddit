@@ -28,3 +28,52 @@ body {
     margin-right: 1.5rem;
     width: 70px;
 }
+
+.header-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+    border-bottom: 1px solid lightgray;
+    margin-top: 0.5rem;
+    padding-bottom: 0.5rem;
+}
+
+.header-container .logo {
+    width: 25px;
+    margin-left: 0.3rem;
+}
+
+.header-container .home {
+    margin-right: 1.5rem;
+    width: 70px;
+}
+
+.header-container .account {
+    width: 55px;
+    margin-left: 1rem;
+}
+
+body {
+    padding-left: 0.5rem;
+}
+
+.header-container {
+    position: relative;
+}
+
+.dropdown-container {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: black;
+    opacity: 0.9;
+    z-index: 9999;
+    border-radius: 10px;
+}
+
+ul,
+li {
+    color: white;
+}
