@@ -1,19 +1,19 @@
-import './card.scss';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+
 import xboxLogo from '../../assets/xboxLogo1.png';
 import upvote from '../../assets/upvote1.png';
 import downvote from '../../assets/downvote1.png';
 import comments from '../../assets/comment.png';
 import share from '../../assets/ShareButon.png';
-import axios from 'axios';
-import { useEffect, useState } from 'react';
+
+import './card.scss';
 
 const API_URL = "https://oauth.reddit.com/hot";
 const API_KEY = "eyJhbGciOiJSUzI1NiIsImtpZCI6IlNIQTI1NjphVXJUQUUrdnZWVTl4K0VMWFNGWEcrNk5WS1FlbEdtSjlWMkQxcWlCZ3VnIiwidHlwIjoiSldUIn0.eyJzdWIiOiJ1c2VyIiwiZXhwIjoxNjg0NTE4MTU2LCJpYXQiOjE2ODQ0MzE3NTYsImp0aSI6Ijc5NzA4OTMtdzg0LUdMNEJCa3pVMXc5SXlTQTdSSHdnNXJsU1pBIiwiY2lkIjoiWGtqdU9DY2tkR0hxRURycVNlaTRidyIsImxpZCI6InQyXzRxdWRwIiwiYWlkIjoidDJfNHF1ZHAiLCJsY2EiOjEyOTU0NzMyNjkzMTcsInNjcCI6ImVKeUtWdEpTaWdVRUFBRF9fd056QVNjIiwiZmxvIjo5fQ.rWR7_4GFtHmsx5ZiVlqBnbq8C64PohZRJbHbVzhLdy23pU1QIbwr12rlLZ9dZ2PWfgjb4B6AIlYuz8mxuj9FSpUz4VkWbJnX91r9r6VOVuWzDH6L8t6zlZOI5PgyHwJKRLOiX32YK9wibIW5lbqCVruxhJDBzmoSiFKYk3N5hW67rBPJWh31BAliRaZ5aTd72YEXSwew8H5tmWf7s4-TUqO35QBvm4C_x9cw0-XEHonsbgjwQM132w_z2MZ9U3UtMpBbXQdWK83zHwSpmO0y6P5f9ot0_Lf0FGcR5Bpuqch3i33MGKCC4Zn08Y7USw-8I6Ibk9_a3my2_g5thP-qkg";
 
-
-
 function Card() {
-    const [posts, setPosts] = useState([]); // Changed from post to posts and null to []
+    const [posts, setPosts] = useState([]);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -24,7 +24,7 @@ function Card() {
                     },
                 });
                 setPosts(response.data.data.children.map(child => child.data));
-                console.log(response)// Changed from post to posts and used map
+                console.log(response)
             } catch (error) {
                 console.error(error);
             }
@@ -33,12 +33,38 @@ function Card() {
         fetchData();
     }, []);
 
-    if (!posts.length) return null;  // Render nothing if posts is not fetched yet
+    if (!posts.length) return null;
+
+    const PROXY_SERVER_URL = 'http://localhost:3001/preview';
+
+    const getImageUrl = (post) => {
+        if (post.domain === 'v.redd.it') {
+            return post.thumbnail; // Use the default thumbnail for v.redd.it videos
+        }
+
+        if (post.preview && post.preview.images && post.preview.images.length > 0) {
+            const images = post.preview.images[0].resolutions;
+            if (images.length > 0) {
+                // Use the proxy server to fetch the image preview
+                const imageUrl = images[images.length - 1].url.replace('&amp;', '&');
+                return `${PROXY_SERVER_URL}?url=${encodeURIComponent(imageUrl)}`;
+            }
+        }
+
+        return post.thumbnail.replace('&amp;', '&');
+    };
+
+    const getVideoUrl = (post) => {
+        if (post.media && post.media.reddit_video) {
+            return post.media.reddit_video.fallback_url;
+        }
+        return '';
+    }
 
     return posts.map((post) => {
-        const postedTime = new Date(post.created_utc * 1000).toLocaleString(); // moved inside map
+        const postedTime = new Date(post.created_utc * 1000).toLocaleString();
         return (
-            <div className='parent--container' key={post.id}>
+            <div className='parent--container' key={post.id} onClick={() => window.open(post.url, "_blank")}>
                 <div className='card--container'>
                     <div className='card--content'>
                         <div className='card--top'>
@@ -49,19 +75,24 @@ function Card() {
                         </div>
                         <h3>{post.title}</h3>
                         <div className='card--img--container'>
-                            <img className='card--img' src={post.thumbnail} alt="post thumbnail" />
+                            {post.is_video ?
+                                <video className='card--img' src={getVideoUrl(post)} controls />
+                                :
+                                <img className='card--img' src={getImageUrl(post)} alt="post thumbnail" />
+                            }
                         </div>
-                        <div className='card--bottom'>
-                            <div className='votes'>
-                                <img className='upvote' src={upvote} alt="upvote" />
-                                <p>{post.ups}</p>
-                                <img className='downvote' src={downvote} alt="downvote" />
-                                <img src={comments} alt="" />
-                                <p>{`${post.num_comments} comments`}</p>
-                                <img className='share' src={share} alt="" />
-                                <p className='share--text'>Share</p>
-                                <p className='elipsis'>...</p>
-                            </div>
+                        <p className='url'>{post.url}</p>
+                    </div>
+                    <div className='card--bottom' onClick={e => e.stopPropagation()}>
+                        <div className='votes'>
+                            <img className='upvote' src={upvote} alt="upvote" />
+                            <p>{post.ups}</p>
+                            <img className='downvote' src={downvote} alt="downvote" />
+                            <img src={comments} alt="" />
+                            <p>{`${post.num_comments} comments`}</p>
+                            <img className='share' src={share} alt="" />
+                            <p className='share--text'>Share</p>
+                            <p className='elipsis'>...</p>
                         </div>
                     </div>
                 </div>
