@@ -1,0 +1,64 @@
+@use "../../partials/global" as *;
+@use "../../partials/variables" as *;
+@use "../../partials/font" as *;
+@use "../../partials/mixin" as *;
+
+.container {
+    height: 10rem;
+    margin-top: .5rem;
+    border: 1px solid black;
+    display: flex;
+}
+
+.container--left {
+    border-right: 1px solid black;
+    width: 15%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.container--right {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    height: 100%;
+    width: 100%;
+    padding: 0 1rem;
+}
+
+.upvote--downvote {
+    width: 35%;
+    cursor: pointer;
+}
+
+.image--thumbnail {
+    height: 80%;
+    object-fit: fill;
+    padding: 1rem;
+    width: 120px;
+}
+
+.title {
+    padding-top: 2rem;
+    font-size: 1.5rem;
+}
+
+.shares {
+    padding-left: 4rem;
+}
+
+.container--bottom {
+    display: flex;
+    flex-direction: row;
+}
+
+.content-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+    overflow: hidden;
+}

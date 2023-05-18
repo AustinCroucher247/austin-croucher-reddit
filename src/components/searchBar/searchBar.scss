@@ -1,0 +1,24 @@
+.search-bar {
+    width: 9rem;
+    display: flex;
+    justify-content: center;
+}
+
+.search-input {
+    width: 9rem;
+    height: 2rem;
+    border: none;
+    border-radius: 20px;
+    padding-left: 2.5rem;
+    margin-left: 4.2rem;
+
+    &:focus {
+        outline: none;
+    }
+
+    background-image: url('../../assets/searchIcon2.png');
+    background-color: #f6f7f8;
+    background-position: 0.5rem 50%;
+    background-repeat: no-repeat;
+    background-size: 1.23rem;
+}

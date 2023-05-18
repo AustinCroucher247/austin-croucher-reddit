@@ -1,0 +1,18 @@
+.logo {
+    width: 30px;
+
+    &--container {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        width: 100%;
+    }
+}
+
+.account {
+    padding-left: 5rem;
+}
+
+body {
+    padding-left: .5rem;
+}
