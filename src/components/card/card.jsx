@@ -36,15 +36,12 @@ function Card() {
     if (!posts.length) return null;
     // eslint-disable-next-line
     const getImageUrl = (post) => {
-        if (post.preview && post.preview.images && post.preview.images.length > 0) {
-            const images = post.preview.images[0].resolutions;
-            if (images.length > 0) {
-                return images[images.length - 1].url.replace('&amp;', '&'); // use highest resolution image
-            }
+        if (post.thumbnail === "default") {
+            return null;
+        } else {
+            return post.thumbnail;
         }
-
-        return post.thumbnail.replace('&amp;', '&');
-    }
+    };
 
     const getVideoUrl = (post) => {
         if (post.media && post.media.reddit_video) {
@@ -68,12 +65,12 @@ function Card() {
                                     <button className='join--button'>Join</button>
                                 </div>
                                 <h3>{post.title}</h3>
-                                <div className='card--img--container'>
-                                    {post.is_video ?
-                                        <video className='card--img' src={getVideoUrl(post)} controls />
-                                        :
-                                        <img className='card--img' src={post.thumbnail} alt="post thumbnail" />
-                                    }
+                                <div className="card--img--container">
+                                    {post.is_video ? (
+                                        <video className="card--img" src={getVideoUrl(post)} controls />
+                                    ) : (
+                                        <img className={`card--img ${post.thumbnail === "default" ? "hidden" : ""}`} src={getImageUrl(post)} alt="post thumbnail" />
+                                    )}
                                 </div>
                                 <p className='url'>{post.url}</p>
                             </div>
