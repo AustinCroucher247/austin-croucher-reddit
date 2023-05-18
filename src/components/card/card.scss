@@ -1,10 +1,11 @@
 .card--container {
     display: flex;
-    justify-content: center; // Center the content horizontally
-    margin-top: .3rem;
+    justify-content: center;
+    margin-top: 0.3rem;
     border: 1px solid lightgray;
     height: 20rem;
     width: 100%;
+    position: relative;
 }
 
 .subreddit--avatar {
@@ -47,4 +48,74 @@
 .parent--container {
     display: flex;
     justify-content: center;
+}
+
+.card--content {
+    display: flex;
+    flex-direction: column;
+}
+
+.card--img {
+    width: 300px;
+    object-fit: contain;
+    margin: 0 auto;
+
+    &--container {
+        display: flex;
+    }
+}
+
+.card--container {
+    display: flex;
+    justify-content: center;
+    margin-top: 0.3rem;
+    border: 1px solid lightgray;
+    height: 20rem;
+    width: 100%;
+    position: relative;
+}
+
+.card--bottom {
+    display: flex;
+    align-items: center;
+    margin-top: auto; // Pushes the votes to the bottom
+    padding: 0.4rem;
+    justify-content: flex-end;
+}
+
+.votes {
+    display: flex;
+    align-items: center;
+    margin-right: 1rem; // Adjust the spacing between votes
+}
+
+.upvote,
+.downvote {
+    width: 25px;
+    margin-right: 0.2rem; // Adjust the spacing between votes and count
+}
+
+p {
+    margin: 0;
+    font-size: 0.68rem;
+}
+
+.downvote {
+    padding-bottom: .3rem;
+    padding-left: .3rem;
+
+}
+
+.share {
+    padding-left: 1rem;
+
+    &--text {
+        padding-left: .5rem;
+    }
+}
+
+.elipsis {
+    font-size: 2rem;
+    margin-left: 2rem;
+    margin-bottom: 1.2rem;
 }
