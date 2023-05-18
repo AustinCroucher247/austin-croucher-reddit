@@ -34,25 +34,17 @@ function Card() {
     }, []);
 
     if (!posts.length) return null;
-
-    const PROXY_SERVER_URL = 'http://localhost:3001/preview';
-
+    // eslint-disable-next-line
     const getImageUrl = (post) => {
-        if (post.domain === 'v.redd.it') {
-            return post.thumbnail; // Use the default thumbnail for v.redd.it videos
-        }
-
         if (post.preview && post.preview.images && post.preview.images.length > 0) {
             const images = post.preview.images[0].resolutions;
             if (images.length > 0) {
-                // Use the proxy server to fetch the image preview
-                const imageUrl = images[images.length - 1].url.replace('&amp;', '&');
-                return `${PROXY_SERVER_URL}?url=${encodeURIComponent(imageUrl)}`;
+                return images[images.length - 1].url.replace('&amp;', '&'); // use highest resolution image
             }
         }
 
         return post.thumbnail.replace('&amp;', '&');
-    };
+    }
 
     const getVideoUrl = (post) => {
         if (post.media && post.media.reddit_video) {
@@ -61,44 +53,48 @@ function Card() {
         return '';
     }
 
-    return posts.map((post) => {
-        const postedTime = new Date(post.created_utc * 1000).toLocaleString();
-        return (
-            <div className='parent--container' key={post.id} onClick={() => window.open(post.url, "_blank")}>
-                <div className='card--container'>
-                    <div className='card--content'>
-                        <div className='card--top'>
-                            <img className='subreddit--avatar' src={xboxLogo} alt="subreddit Avatar" />
-                            <p className='subreddit--text'>{`r/${post.subreddit}`}</p>
-                            <p className='postedBy--text'>{`Posted by u/${post.author} at ${postedTime}`}</p>
-                            <button className='join--button'>Join</button>
+    return (
+        <div>
+            {posts.map((post) => {
+                const postedTime = new Date(post.created_utc * 1000).toLocaleString();
+                return (
+                    <div className='parent--container' key={post.id} onClick={() => window.open(post.url, "_blank")}>
+                        <div className='card--container'>
+                            <div className='card--content'>
+                                <div className='card--top'>
+                                    <img className='subreddit--avatar' src={xboxLogo} alt="subreddit Avatar" />
+                                    <p className='subreddit--text'>{`r/${post.subreddit}`}</p>
+                                    <p className='postedBy--text'>{`Posted by u/${post.author} at ${postedTime}`}</p>
+                                    <button className='join--button'>Join</button>
+                                </div>
+                                <h3>{post.title}</h3>
+                                <div className='card--img--container'>
+                                    {post.is_video ?
+                                        <video className='card--img' src={getVideoUrl(post)} controls />
+                                        :
+                                        <img className='card--img' src={post.thumbnail} alt="post thumbnail" />
+                                    }
+                                </div>
+                                <p className='url'>{post.url}</p>
+                            </div>
+                            <div className='card--bottom' onClick={e => e.stopPropagation()}>
+                                <div className='votes'>
+                                    <img className='upvote' src={upvote} alt="upvote" />
+                                    <p>{post.ups}</p>
+                                    <img className='downvote' src={downvote} alt="downvote" />
+                                    <img src={comments} alt="" />
+                                    <p>{`${post.num_comments} comments`}</p>
+                                    <img className='share' src={share} alt="" />
+                                    <p className='share--text'>Share</p>
+                                    <p className='elipsis'>...</p>
+                                </div>
+                            </div>
                         </div>
-                        <h3>{post.title}</h3>
-                        <div className='card--img--container'>
-                            {post.is_video ?
-                                <video className='card--img' src={getVideoUrl(post)} controls />
-                                :
-                                <img className='card--img' src={getImageUrl(post)} alt="post thumbnail" />
-                            }
-                        </div>
-                        <p className='url'>{post.url}</p>
                     </div>
-                    <div className='card--bottom' onClick={e => e.stopPropagation()}>
-                        <div className='votes'>
-                            <img className='upvote' src={upvote} alt="upvote" />
-                            <p>{post.ups}</p>
-                            <img className='downvote' src={downvote} alt="downvote" />
-                            <img src={comments} alt="" />
-                            <p>{`${post.num_comments} comments`}</p>
-                            <img className='share' src={share} alt="" />
-                            <p className='share--text'>Share</p>
-                            <p className='elipsis'>...</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        );
-    });
+                );
+            })}
+        </div>
+    );
 }
 
 export default Card;
