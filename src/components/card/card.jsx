@@ -11,7 +11,7 @@ import './card.scss';
 
 const API_URL = "https://oauth.reddit.com/hot";
 const API_KEY = "eyJhbGciOiJSUzI1NiIsImtpZCI6IlNIQTI1NjphVXJUQUUrdnZWVTl4K0VMWFNGWEcrNk5WS1FlbEdtSjlWMkQxcWlCZ3VnIiwidHlwIjoiSldUIn0.eyJzdWIiOiJ1c2VyIiwiZXhwIjoxNjg0NTE4MTU2LCJpYXQiOjE2ODQ0MzE3NTYsImp0aSI6Ijc5NzA4OTMtdzg0LUdMNEJCa3pVMXc5SXlTQTdSSHdnNXJsU1pBIiwiY2lkIjoiWGtqdU9DY2tkR0hxRURycVNlaTRidyIsImxpZCI6InQyXzRxdWRwIiwiYWlkIjoidDJfNHF1ZHAiLCJsY2EiOjEyOTU0NzMyNjkzMTcsInNjcCI6ImVKeUtWdEpTaWdVRUFBRF9fd056QVNjIiwiZmxvIjo5fQ.rWR7_4GFtHmsx5ZiVlqBnbq8C64PohZRJbHbVzhLdy23pU1QIbwr12rlLZ9dZ2PWfgjb4B6AIlYuz8mxuj9FSpUz4VkWbJnX91r9r6VOVuWzDH6L8t6zlZOI5PgyHwJKRLOiX32YK9wibIW5lbqCVruxhJDBzmoSiFKYk3N5hW67rBPJWh31BAliRaZ5aTd72YEXSwew8H5tmWf7s4-TUqO35QBvm4C_x9cw0-XEHonsbgjwQM132w_z2MZ9U3UtMpBbXQdWK83zHwSpmO0y6P5f9ot0_Lf0FGcR5Bpuqch3i33MGKCC4Zn08Y7USw-8I6Ibk9_a3my2_g5thP-qkg";
-
+const API_TEST = "https://oauth.reddit.com/r/xbox/api/info"
 function Card() {
     const [posts, setPosts] = useState([]);
 
@@ -24,6 +24,22 @@ function Card() {
                     },
                 });
                 setPosts(response.data.data.children.map(child => child.data));
+                console.log(response)
+            } catch (error) {
+                console.error(error);
+            }
+        };
+
+        fetchData();
+    }, []);
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await axios.get(API_TEST, {
+                    headers: {
+                        Authorization: `Bearer ${API_KEY}`,
+                    },
+                });
                 console.log(response)
             } catch (error) {
                 console.error(error);
