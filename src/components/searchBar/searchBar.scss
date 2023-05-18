@@ -3,18 +3,17 @@
 
 
 .search-bar {
-    width: 9rem;
+    width: 6rem;
     display: flex;
     justify-content: center;
 }
 
 .search-input {
-    width: 9rem;
+    width: 7rem;
     height: 2rem;
     border: none;
     border-radius: 20px;
     padding-left: 2.5rem;
-    margin-left: 4.2rem;
 
 
     &:focus {
