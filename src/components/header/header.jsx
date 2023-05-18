@@ -8,7 +8,7 @@ function Header() {
     return (
         <div className='logo--container'>
             <img className='logo' src={redditLogo} alt="logo" />
-            <img src={homeDownArrow} alt="homeArrow" />
+            <img className='home' src={homeDownArrow} alt="homeArrow" />
             <SearchBar />
             <img className='account' src={AccountArrow} alt="" />
         </div>
